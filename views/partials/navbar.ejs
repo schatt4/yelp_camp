@@ -20,6 +20,14 @@
           >New Campgrounds</a
         >
       </div>
+      <div class="navbar-nav ms-auto">
+        <% if(!currentUser){ %>
+        <a href="/login" class="nav-link text-light">Login</a>
+        <a href="/register" class="nav-link text-light">Register</a>
+        <% }else{ %>
+        <a href="/logout" class="nav-link text-light">Logout</a>
+        <% } %>
+      </div>
     </div>
   </div>
 </nav>

@@ -1,6 +1,6 @@
 const Campground = require("../models/campground");
 
-//index
+//index all campground page
 module.exports.index = async (req, res) => {
   const campground = await Campground.find({});
   res.render("campgrounds/index", { campground });
@@ -16,16 +16,19 @@ module.exports.createCampground = async (req, res, next) => {
   //console.log(req.body);
   //if (!req.body.campground) throw new ExpressError("Invalid Campground Data", 400);
   const c = new Campground(req.body.campground);
+  c.author = req.user._id;
   await c.save();
   req.flash("success", "Successfully made a new campground!");
   res.redirect(`/campgrounds/${c._id}`);
 };
 
-//getching particular campground
+//getting/showing particular campground after clicking view button
 module.exports.showCampground = async (req, res) => {
   //console.log(req.params);
   const { id } = req.params;
-  const campground = await Campground.findById(id).populate("review");
+  const campground = await Campground.findById(id)
+    .populate({ path: "review", populate: { path: "author" } })
+    .populate("author");
   //console.log(campground);
   if (!campground) {
     req.flash("error", "can't find the campground");

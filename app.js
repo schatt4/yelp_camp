@@ -8,11 +8,12 @@ const session = require("express-session");
 const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
-//const User = require("./models/user");
+const User = require("./models/user");
+//const { storeReturnTo } = require("./middleware");
 
 const port = 3000;
 
-//const userRoute = require("./routes/users");
+const userRoute = require("./routes/users");
 const campgroundRoute = require("./routes/campgrounds");
 const reviewRoute = require("./routes/reviews.js");
 mongoose
@@ -43,41 +44,46 @@ const sessionConfig = {
   maxAge: 1000 * 60 * 60 * 24 * 7,
 };
 app.use(session(sessionConfig));
-
-// app.use(passport.initialize());
-// app.use(passport.session());
-// passport.use(new LocalStrategy(User.authenticate()));
-
-// passport.serializeUser(User.serializeUser());
-// passport.deserializeUser(User.deserializeUser());
-
 app.use(flash());
 
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 app.use((req, res, next) => {
-  console.log(req.session);
+  //console.log(req.session, req.user);
   res.locals.currentUser = req.user;
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
   next();
 });
 
-//app.use("/", userRoute);
+app.use("/", userRoute);
 app.use("/campgrounds", campgroundRoute);
-app.use("/campgrounds/:id/reviews", reviewRoute);
+app.use("/campgrounds/:campid/reviews", reviewRoute);
 
 app.get("/", (req, res) => {
   res.render("home");
 });
 
+// app.get("/fakeUser", async (req, res) => {
+//   const user = await new User({ email: "suju@gmail.com", username: "Sri" });
+//   const newUser = await User.register(user, "chicken");
+//   res.send(newUser);
+// });
+
 //Error handling middlewire
 app.all("*", (req, res, next) => {
-  next(new ExpressError("Page Not Found", 400));
+  next(new ExpressError("Page Not Found", 404));
 });
 
 app.use((err, req, res, next) => {
   const { statusCode = 500 } = err;
   if (!err.message) err.message = "Something went wrong";
-  //console.log(err);
+  console.log(err);
   res.status(statusCode).render("error", { err });
 });
 
