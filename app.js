@@ -20,8 +20,8 @@ const MongoStore = require('connect-mongo');
 //const { storeReturnTo } = require("./middleware");
 
 const port = 3000;
-//const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/yelp-camp';
-const dbUrl="mongodb://127.0.0.1:27017/yelp-camp"
+const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/yelp-camp';
+// const dbUrl="mongodb://127.0.0.1:27017/yelp-camp"
 
 const userRoute = require("./routes/users");
 const campgroundRoute = require("./routes/campgrounds");
