@@ -1,30 +1,40 @@
 <% layout("layouts/boilerplate") %>
-<h1>All Campgrounds</h1>
+  <h1>All Campgrounds</h1>
 
-<% for(let c of campground){ %>
+  <% for(let c of campground){ %>
 
-<div class="card" mb-3>
-  <div class="row">
-    <div class="col-md-4">
-      <img class="img-fluid" alt="" src="<%=c.image%>" />
-    </div>
-    <div class="col-md-8">
-      <div class="card-body">
-        <h5 class="card-title"><%= c.title %></h5>
-        <p class="card-text"><%= c.description %></p>
-        <p class="card-text">
-          <small class="text-muted"><%= c.location%></small>
-        </p>
-        <a class="btn btn-primary" href="/campgrounds/<%=c._id%>"
-          >View <%=campground.title%></a
-        >
+    <div class="card mb-3" >
+      <div class="row">
+        
+        <div class="col-md-4">
+          <%if(c.images.length) {%>
+          <img crossorigin="anonymous" class="img-fluid" alt="" src="<%=c.images[0].url%>" />
+          <% }else {%>
+            <img crossorigin="anonymous" class="img-fluid" alt=""
+                    src="https://res.cloudinary.com/dzkk67hl1/image/upload/f_auto,q_auto/v1/Yelpcamp/f7oyxixa2mdwu9josgni">
+                <% } %>
+        </div>
+        <div class="col-md-8">
+          <div class="card-body">
+            <h5 class="card-title">
+              <%= c.title %>
+            </h5>
+            <p class="card-text">
+              <%= c.description %>
+            </p>
+            <p class="card-text">
+              <small class="text-muted">
+                <%= c.location%>
+              </small>
+            </p>
+            <a class="btn btn-primary" href="/campgrounds/<%=c._id%>">View <%=c.title%></a>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
-<% } %>
+    <% } %>
 
-<!-- <div>
+      <!-- <div>
   <a href="/campgrounds/new">Add new camp</a>
 </div>
 <div>
