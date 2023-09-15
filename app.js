@@ -49,11 +49,13 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(mongoSanitize());
 
 
+const secret = process.env.SECRET || "kitykat";
+
 const store = MongoStore.create({
   mongoUrl: dbUrl,
   touchAfter: 24 * 60 * 60,
   crypto: {
-    secret: "kitykat"
+    secret
   }
 });
 
@@ -65,7 +67,7 @@ const sessionConfig = {
   store,
   name:'session',
   httpOnly: true,
-  secret: "kitykat",
+  secret,
   resave: false,
   saveUninitialized: false,
   expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
@@ -118,6 +120,9 @@ app.use(helmet({contentSecurityPolicy :false}));
 //       },
 //   })
 // );
+
+
+
 
 app.use(passport.initialize());
 app.use(passport.session());
