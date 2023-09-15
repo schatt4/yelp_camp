@@ -38,8 +38,8 @@ mongoose
 
 const app = express();
 app.engine("ejs", ejsMate);
-app.set("views", path.join(__dirname, "/views"));
 app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "/views"));
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
